@@ -32,7 +32,6 @@ async function createDocument(collection) {
     const result = await collection.insertOne({ name: 'Bereket Negash', age: 31});
     //Usage
     //await createDocument(collection);
-
   }
   
 async function createMultipleDocuments(collection) {
