@@ -17,9 +17,11 @@ async function main() {
     await client.connect({ useUnifiedTopology: true });
     console.log('Connected successfully to server');
     const db = client.db(dbName);
-    const collection = db.collection('users');
+    const userCollection = db.collection('users');
+    const taskCollection = db.collection('task');
 
-    await createDocument(collection);
+    //await createDocument(userCollection);
+    await createMultipleTaskDocuments(taskCollection);
 
     } catch (err) {
         console.error(err);
@@ -29,7 +31,15 @@ async function main() {
     }
 
 async function createDocument(collection) {
-    const result = await collection.insertOne({ name: 'Bereket Negash', age: 31});
+    const result = await collection.insertOne({
+        name: 'Bereket Negash', age: 31
+        },(eroor, result) => {
+          if(eroor){
+            return console.log('unable to insert user')
+          }
+
+          console.log(result.opts)
+        } );
     //Usage
     //await createDocument(collection);
   }
@@ -38,9 +48,29 @@ async function createMultipleDocuments(collection) {
     const result = await collection.insertMany([
       { name: 'Alice', age: 25 },
       { name: 'Bob', age: 40 }
-    ]);
+    ],(eroor, result) => {
+      if(eroor){
+        return console.log('unable to insert user')
+      }
+
+      console.log(result.opts)
+    });
     //Usage
     //await createMultipleDocuments(collection);
+  }
+
+  async function createMultipleTaskDocuments(collection) {
+    const result = await collection.insertMany([
+      {description: 'Bible Study', completed: true},
+      {description: 'Prayer', completed: false},
+      {description: 'Node Js Study', completed: true}
+    ],(eroor, result) => {
+      if(eroor){
+        return console.log('unable to insert user')
+      }
+
+      console.log(result.ops)
+    })
   }
   
   
