@@ -1,6 +1,6 @@
 //CRUD
 
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectID } = require('mongodb');
 // import { MongoClient } from 'mongodb'
 
 // Connection URL
@@ -9,6 +9,8 @@ const client = new MongoClient(url);
 
 // Database Name
 const dbName = 'task-manager';
+
+const id = new ObjectID()
 
 async function main() {
 
@@ -32,7 +34,7 @@ async function main() {
 
 async function createDocument(collection) {
     const result = await collection.insertOne({
-        name: 'Bereket Negash', age: 31
+      name: 'Bereket Negash', age: 31
         },(eroor, result) => {
           if(eroor){
             return console.log('unable to insert user')
