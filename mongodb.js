@@ -5,7 +5,7 @@ const { MongoClient, ObjectID } = require('mongodb');
 
 // Connection URL
 const url = 'mongodb://localhost:27017';
-const client = new MongoClient(url);
+const client = new MongoClient(url, { useUnifiedTopology: true }) ;
 
 // Database Name
 const dbName = 'task-manager';
@@ -17,13 +17,15 @@ async function main() {
     try{
     // Use connect method to connect to the server
     await client.connect({ useUnifiedTopology: true });
-    console.log('Connected successfully to server');
+    //console.log('Connected successfully to server');
     const db = client.db(dbName);
     const userCollection = db.collection('users');
     const taskCollection = db.collection('task');
 
     //await createDocument(userCollection);
-    await createMultipleTaskDocuments(taskCollection);
+    //await createMultipleTaskDocuments(taskCollection);
+    //await findOneDocument(userCollection);
+    await updateDocument(userCollection);
 
     } catch (err) {
         console.error(err);
@@ -46,7 +48,7 @@ async function createDocument(collection) {
     //await createDocument(collection);
   }
   
-async function createMultipleDocuments(collection) {
+const createMultipleDocuments = async(collection) => {
     const result = await collection.insertMany([
       { name: 'Alice', age: 25 },
       { name: 'Bob', age: 40 }
@@ -61,7 +63,7 @@ async function createMultipleDocuments(collection) {
     //await createMultipleDocuments(collection);
   }
 
-  async function createMultipleTaskDocuments(collection) {
+  const createMultipleTaskDocuments = async(collection) => {
     const result = await collection.insertMany([
       {description: 'Bible Study', completed: true},
       {description: 'Prayer', completed: false},
@@ -74,6 +76,58 @@ async function createMultipleDocuments(collection) {
       console.log(result.ops)
     })
   }
+  
+  const findOneDocument = async(collection) => {
+    const result = await collection.findOne({ name: 'Bereket Negash' }); // Replace with your query
+    if (result) {
+      console.log('Found a document:', result);
+    } else {
+      console.log('No document matches the provided query');
+    }
+    // Usage
+  //await findOneDocument(collection);
+  }
+
+  const readDocuments = async(collection) => {
+    const cursor = collection.find({ age: 31 }); // Replace with your query
+    const results = await cursor.toArray();
+  
+    if (results.length > 0) {
+      console.log('Found documents:');
+      results.forEach((result, i) => {
+        console.log(`${i + 1}. ${result.name} - ${result.age} years old`);
+      });
+    } else {
+      console.log('No documents found');
+    }
+
+      // Usage
+  //await readDocuments(collection);
+  }
+
+  const updateDocument = async(collection) => {
+    const filter = { _id: new ObjectID("6737ec8178618982340aa14a")
+    }; // Replace with your filter
+    const updateDoc = {
+      $set: {
+        name: 'Mahlet Assefa' // Replace with the fields you want to update
+      },
+    };
+  
+    const result = await collection.updateOne(filter, updateDoc);
+    console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s).`);
+      
+    // Usage
+    //await updateDocument(collection);
+
+  }
+  
+  
+  
+
+  
+  
+  
   
   
 main();
