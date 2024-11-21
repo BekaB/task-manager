@@ -10,6 +10,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "mongodb": "^3.7.4"
+    "mongodb": "^3.7.4",
+    "mongoose": "^5.13.22",
+    "validator": "^13.12.0"
   }
 }
