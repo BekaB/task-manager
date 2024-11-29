@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 
-const User = mongoose.model('users', {
+const userSchema = new mongoose.Schema({
     name:{
         type: String,
         trim: true,
@@ -41,16 +41,6 @@ const User = mongoose.model('users', {
     }
 })
 
-// const me = new User({
-//     name: 'Jesus',
-//     email: 'god@incarnate.COM    ',
-//     password: '125jesus  '
-// })
-
-// me.save().then(() => {
-//     console.log(me)
-// }).catch((error) =>{
-//     console.log(error)
-// })
+const User = mongoose.model('users', userSchema)
 
 module.exports = User
