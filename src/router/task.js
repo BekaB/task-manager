@@ -65,13 +65,17 @@ router.patch('/tasks/:id', async(req, res) => {
     }
 
     try{
-        const user = User.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
+        const task = await Task.findById(req.params.id)
 
-        if(!user){
+        updates.forEach((update) =>  task[update] = req.body[update])
+        await task.save()
+
+        //const user = User.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
+        if(!task){
             return res.status(404).send()
         }
 
-        res.send(user)
+        res.send(task)
     }catch(e){
         res.status(400).send(e)
     }
@@ -81,12 +85,12 @@ router.delete('/tasks/:id', async(req, res) => {
     const _id = req.body.id
 
     try{
-        const user = User.findByIdAndDelete(_id)
-        if(!user){
+        const task = Task.findByIdAndDelete(_id)
+        if(!task){
             res.status(404).send()
         }
 
-        res.send(user)
+        res.send(task)
     }catch(e){
         res.status(400).send(e)
     }
