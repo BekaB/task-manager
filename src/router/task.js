@@ -7,9 +7,9 @@ router.post('/tasks', async (req, res) => {
 
     try{
         await task.save()
-        res.status(201).res.send(task)
+        res.status(201).send(task)
     }catch(e){
-        // console.log(req.body)
+        //console.error(e) // Add logging for debug
         res.status(400).send(e)
     }
 })

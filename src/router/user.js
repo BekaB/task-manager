@@ -9,6 +9,7 @@ router.post('/users', async (req, res) => {
         await user.save()
         res.status(201).send(user)
     }catch(e){
+        //console.error(e) // Add logging for debug
         res.status(404).send(e)
     }
 
@@ -18,6 +19,16 @@ router.post('/users', async (req, res) => {
 //     }).catch((e) => {
 //         res.status(400).send(e)    
 //     })
+ })
+
+ router.post('/user/login', async (req, res) => {
+    try{
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+
+        res.send(user)
+    }catch(e){
+
+    }
  })
 
 router.get('/users', async (req, res) => {
