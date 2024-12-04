@@ -7,7 +7,9 @@ router.post('/users', async (req, res) => {
 
     try{
         await user.save()
-        res.status(201).send(user)
+        const token = await user.generatAuthToken()
+
+        res.status(201).send({user, token})
     }catch(e){
         //console.error(e) // Add logging for debug
         res.status(404).send(e)
@@ -21,13 +23,15 @@ router.post('/users', async (req, res) => {
 //     })
  })
 
- router.post('/user/login', async (req, res) => {
+ router.post('/users/login', async (req, res) => {
     try{
         const user = await User.findByCredentials(req.body.email, req.body.password)
-
-        res.send(user)
+        // console.error(e) // Add logging for debug
+        const token = await user.generatAuthToken()
+        res.send({user,token})
     }catch(e){
-
+        console.error(e) // Add logging for debug
+        res.status(400).send()
     }
  })
 
@@ -54,7 +58,7 @@ router.get('/users/:id', async (req, res) => {
         const user = await User.findById(_id)
         if(!user){
             console.log(req.params.id)
-            return res.status(404).send('i dont know whhhhhttt')
+            return res.status(404).send()
         }
         res.send(user)
     }catch(e){
@@ -95,22 +99,25 @@ router.patch('/users/:id', async(req, res) => {
 
         res.send(user)
     }catch(e){
+        //console.error(e) // Add logging for debug
         res.status(400).send(e)
     }
 })
 
 router.delete('/users/:id', async(req, res) => {
-    const _id = req.body.id
+    const _id = req.params.id
 
     try{
-        const user = User.findByIdAndDelete(_id)
+        const user = await User.findByIdAndDelete(_id)
         if(!user){
             res.status(404).send()
         }
-
+        
+        //res.send(user.toObject())
         res.send(user)
     }catch(e){
-        res.status(400).send(e)
+        console.error(e) // Add logging for debug
+        res.status(500).send(e)
     }
 })
 

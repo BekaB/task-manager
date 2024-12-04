@@ -85,7 +85,7 @@ router.delete('/tasks/:id', async(req, res) => {
     const _id = req.body.id
 
     try{
-        const task = Task.findByIdAndDelete(_id)
+        const task = await Task.findByIdAndDelete(_id)
         if(!task){
             res.status(404).send()
         }
